@@ -1,0 +1,176 @@
+:root {
+	--glowny-kolor-tla: #2773e5;
+	--jasniejszy-kolor-tla: #3884f6;
+	--ciemniejszy-kolor-tla: #1662d4;
+	--jeszcze-ciemniejszy-kolor: #0551c3;
+	--tlo: #252525;
+	--stopka-tlo: #131313;
+}
+
+html,
+body {
+	height: 100%;
+	background-color: var(--tlo);
+	font-family: "Lato", sans-serif;
+	font-size: 20px;
+	color: #ffffff;
+	margin: 0 !important;
+}
+
+#all {
+	position: relative;
+	min-height: 100vh;
+}
+
+#header {
+	width: 100%;
+	padding-bottom: 20px;
+	height: 70px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#logo {
+	font-family: "Josefin Sans", sans-serif;
+	font-weight: bold;
+	text-align: center;
+	float: center;
+	font-size: 85px;
+	display: block;
+}
+
+a.logolink {
+	text-decoration: none;
+	display: block;
+	color: var(--ciemniejszy-kolor-tla);
+}
+
+
+#navigation {
+	width: 100%;
+	padding: 10px 0;
+	background-color: var(--glowny-kolor-tla);
+	text-align: center;
+	border-top: 1px solid var(--ciemniejszy-kolor-tla);
+	border-bottom: 1px solid var(--ciemniejszy-kolor-tla);
+}
+
+ol {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	font-size: 18px;
+	height: 35px;
+	line-height: 200%;
+	text-shadow: 2px 2px 1px #000000;
+	display: inline-block;
+	color: #cacaca;
+}
+
+ol a {
+	color: #ececec;
+	text-decoration: none;
+	display: block;
+}
+
+ol > li {
+	float: left;
+	width: 285px;
+	height: 40px;
+	border-right: 1px solid var(--ciemniejszy-kolor-tla);
+	background-color: var(--glowny-kolor-tla);
+}
+
+ol > li:first-child {
+	border-left: 1px solid var(--ciemniejszy-kolor-tla);
+}
+
+ol > li:hover {
+	background-color: var(--jasniejszy-kolor-tla);
+}
+
+ol > li:hover > a {
+	color: var(--jeszcze-ciemniejszy-kolor);
+}
+
+ol > li > ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	height: 40px;
+	display: none;
+}
+
+ol > li:hover > ul {
+	display: block;
+}
+
+ol > li > ul > li {
+	background-color: var(--jasniejszy-kolor-tla);
+	position: relative;
+	z-index: 100;
+	border-top: 1px solid var(--ciemniejszy-kolor-tla);
+}
+
+ol > li > ul > li:hover {
+	background-color: var(--glowny-kolor-tla);
+}
+
+ol > li > ul > li:hover > a {
+	color: var(--jeszcze-ciemniejszy-kolor);
+}
+
+#user {
+	text-align: center;
+}
+
+#content {
+	width: 60%;
+	padding-top: 1.5rem;
+	padding-bottom: 3.5rem;
+	text-align: justify;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: var(--stopka-tlo);
+	text-align: center;
+	padding: 10px 0;
+}
+
+.avatar {
+	float: right;
+	width: 200px;
+	min-height: 200px;
+	border-radius: 50%;
+	border: solid var(--ciemniejszy-kolor-tla);
+	background-color: var(--jasniejszy-kolor-tla);
+}
+
+.table {
+	border-collapse: collapse;
+	margin: auto;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+.table tr {
+	background-color: var(--glowny-kolor-tla);
+	color: #ffffff;
+	text-align: left;
+	border-bottom: 1px solid var(--jasniejszy-kolor-tla);
+}
+.table td,
+th {
+	padding: 12px 15px;
+}
+table thead tr {
+	background-color: #009879;
+	color: #ffffff;
+	text-align: left;
+}
+#avatar {
+	float: left;
+}

@@ -1,0 +1,64 @@
+:root {
+	--glowny-kolor-tla: #2773e5;
+	--jasniejszy-kolor-tla: #3884f6;
+	--ciemniejszy-kolor-tla: #1662d4;
+	--jeszcze-ciemniejszy-kolor: #0551c3;
+}
+#div_login {
+	width: 290px;
+	min-height: 270px;
+	margin: 0 auto;
+}
+
+#div_login h1 {
+	margin-top: 0px;
+	font-weight: normal;
+	padding: 10px;
+	text-align: center;
+	color: white;
+	font-family: "Josefin Sans", sans-serif;
+}
+
+#div_login div {
+	clear: both;
+	margin-top: 10px;
+	padding: 5px;
+}
+
+#div_login .textbox {
+	width: 96%;
+	padding: 7px;
+}
+
+#div_login input[type="submit"] {
+	padding: 6px;
+	width: 102.5%;
+	background-color: var(--glowny-kolor-tla);
+	border: 0px;
+	color: white;
+	font-size: 20px;
+}
+
+#div_login textarea {
+	width: 96%;
+	padding: 7px;
+}
+
+a.sign {
+	padding: 6px;
+	font-size: 20px;
+	width: 100px;
+	color: white;
+	text-decoration: none;
+	background-color: var(--glowny-kolor-tla);
+	text-align: center;
+}
+
+.sign:hover {
+	background-color: var(--jasniejszy-kolor-tla);
+}
+.error {
+	color: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
