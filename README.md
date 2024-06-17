@@ -1,4 +1,4 @@
-# Technologie-i-oprogramowanie-chmurowe-Informacje-og-lne
+# Technologie-i-oprogramowanie-chmurowe
 Kalkulator walut Aplikacja, która na podstawie kursów walut przelicza kwoty między wybranymi walutami, pozwala śledzić historię kursów, etc.
 
 Kwerenda do utworzenia bazy danych:
