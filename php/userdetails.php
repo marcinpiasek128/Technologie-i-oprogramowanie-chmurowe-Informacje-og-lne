@@ -3,9 +3,8 @@ require("connect.php");
 
 session_start();
 $x = $_SESSION['ID_User'];
-$query = "SELECT Picture FROM data WHERE ID_User = ?";
-$params = array($x);
-$stmt = sqlsrv_query($conn, $query, $params);
+$query = "SELECT Picture FROM data WHERE ID_User = '$x'";
+$stmt = sqlsrv_query($conn, $query);
 
 if($stmt === false) {
     die(print_r(sqlsrv_errors(), true));
