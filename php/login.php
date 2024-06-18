@@ -69,7 +69,7 @@ require_once("login-script.php");
                         <input type="submit" value="Zaloguj" name="but_submit" id="but_submit" />
                     </div>
                     <div>
-                        <a href="../php/signup.php" class="sign">Załóż konto</a>
+                        <a href="signup.php" class="sign">Załóż konto</a>
                     </div>
                     <div>
 
