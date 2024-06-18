@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("connect.php");
+require_once("connect.php");
 
 $working=true;
 @$cond_mail= preg_match('/^[a-z0-9._%-]+@[a-z0-9.-]+.[a-z]{2,4}$/i',$email = $_POST['txt_email']);
