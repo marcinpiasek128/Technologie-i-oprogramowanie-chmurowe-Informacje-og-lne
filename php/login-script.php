@@ -1,47 +1,58 @@
 <?php
 session_start();
 require("connect.php");
-if ($conn->connect_errno!=0)
-{
-    echo "Error: ".$conn->connect_errno;
-}
-else
-{
+
+try {
+    $conn = new PDO("sqlsrv:server = tcp:<your_server_name>,1433; Database = <your_database_name>", "<your_username>", "<your_password>");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
     if(isset($_POST['but_submit']))
     {
         $working = true;
-        @$login = $_POST['txt_uname'];
-        @$pass = $_POST['txt_pwd'];
-        
-        $result = $conn->query("SELECT ID_User FROM $data WHERE Username='$login'");
-        
-        $amount_of_nicknames = $result->num_rows;
-        
+        $login = $_POST['txt_uname'] ?? '';
+        $pass = $_POST['txt_pwd'] ?? '';
+
+        // Use parameterized queries to prevent SQL injection
+        $stmt = $conn->prepare("SELECT ID_User FROM data WHERE Username = :login");
+        $stmt->bindParam(':login', $login);
+        $stmt->execute();
+        $amount_of_nicknames = $stmt->rowCount();
+
         if($amount_of_nicknames == 0)
         {
             $working = false;
             $_SESSION['e_txt_uname']="Podano zły login!";
         }
-        $result = $conn->query("SELECT ID_User FROM $data WHERE Password='$pass'");
-        $amount_of_passwords = $result->num_rows;
-        
+
+        $stmt = $conn->prepare("SELECT ID_User FROM data WHERE Password = :pass");
+        $stmt->bindParam(':pass', $pass);
+        $stmt->execute();
+        $amount_of_passwords = $stmt->rowCount();
+
         if($amount_of_passwords == 0)
         {
             $working = false;
             $_SESSION['e_txt_pwd']="Podano złe hasło!";
         }
 
-        $reg="SELECT * FROM $data WHERE Username='$login' AND Password='$pass'";
-        $result=$conn->query($reg);
-        $amount=$result->num_rows;
+        $stmt = $conn->prepare("SELECT * FROM data WHERE Username = :login AND Password = :pass");
+        $stmt->bindParam(':login', $login);
+        $stmt->bindParam(':pass', $pass);
+        $stmt->execute();
+        $amount = $stmt->rowCount();
+
         if($amount == 0)
         {
             $working = false;
         }
 
-        $sql = "SELECT ban FROM data WHERE Username='$login' AND Password='$pass'";
-        $result = $conn->query($sql);
-        while($row = $result->fetch_assoc()) {
+        $stmt = $conn->prepare("SELECT ban FROM data WHERE Username = :login AND Password = :pass");
+        $stmt->bindParam(':login', $login);
+        $stmt->bindParam(':pass', $pass);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($result as $row) {
             if($row["ban"] == 1)
             {
                 $working = false;
@@ -51,12 +62,15 @@ else
 
         if ($working == true)
         {
-            $_SESSION['loggedin']=true;
-            $reg="SELECT * FROM $data WHERE Username='$login' AND Password='$pass'";
-            $res = mysqli_query($conn,$reg);
-            $row=$res->fetch_assoc();
-            $_SESSION['ID_User']=$row['ID_User'];
-            $_SESSION['Username']=$row['Username'];
+            $_SESSION['loggedin'] = true;
+            $stmt = $conn->prepare("SELECT * FROM data WHERE Username = :login AND Password = :pass");
+            $stmt->bindParam(':login', $login);
+            $stmt->bindParam(':pass', $pass);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $_SESSION['ID_User'] = $row['ID_User'];
+            $_SESSION['Username'] = $row['Username'];
             
             if($_SESSION['Username'] == 'admin')
             {
@@ -67,7 +81,10 @@ else
                 header('Location: userpage.php');
             }
         }
-        $conn->close();
     }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
+
+$conn = null;
 ?>
