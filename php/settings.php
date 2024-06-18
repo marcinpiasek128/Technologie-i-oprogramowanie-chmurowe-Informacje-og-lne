@@ -75,17 +75,32 @@ require("settings-script.php");
             <h2>Zmień Awatar (.jpg):</h2>
 
             <?php
-                require("connect.php");
-                $x = $_SESSION['ID_User'];
-                $query = "SELECT Picture FROM data WHERE ID_User='$x'";
-                $result = $conn->query($query);
-
-                while($row = $result->fetch_array())
-                {
-                    @$avatar = $row['Picture'];
-                }
-                echo '<img class="avatar" id="avatar" src="data:image/jpg;charset=utf8;base64,'.base64_encode($avatar).'" /> <br><br><br><br><br><br><br><br><br><br><br>';
-            ?>
+		session_start();
+		require("connect.php");
+		
+		$x = $_SESSION['ID_User'];
+		$sql = "SELECT Picture FROM data WHERE ID_User = ?";
+		$params = array($x);
+		$stmt = sqlsrv_query($conn, $sql, $params);
+		
+		if ($stmt === false) {
+		    die(print_r(sqlsrv_errors(), true));
+		}
+		
+		$avatar = null;
+		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+		    $avatar = $row['Picture'];
+		}
+		
+		if ($avatar !== null) {
+		    echo '<img class="avatar" id="avatar" src="data:image/jpg;charset=utf8;base64,' . base64_encode($avatar) . '" /> <br><br><br><br><br><br><br><br><br><br><br>';
+		} else {
+		    echo 'No avatar found.';
+		}
+		
+		sqlsrv_free_stmt($stmt);
+		sqlsrv_close($conn);
+		?>
 
             <form method="post" action="changeavatar.php" enctype="multipart/form-data">
                 <div>
