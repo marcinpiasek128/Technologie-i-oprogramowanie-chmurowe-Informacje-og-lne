@@ -11,10 +11,10 @@ if (!empty($_FILES["image"]["name"])) {
     if (in_array($fileType, $allowTypes)) {
         $image = $_FILES['image']['tmp_name'];
         $avatar = file_get_contents($image);
-        // We don't need to base64 encode here, directly store as binary
-        // $avatar = base64_encode($avatar);
+        // Converting the image content to hexadecimal representation
+        $avatar = bin2hex($avatar);
 
-        $sql = "UPDATE data SET Picture = ? WHERE ID_User = ?";
+        $sql = "UPDATE data SET Picture = CONVERT(VARBINARY(MAX), ?) WHERE ID_User = ?";
         $params = array($avatar, $x);
         $stmt = sqlsrv_query($conn, $sql, $params);
 
