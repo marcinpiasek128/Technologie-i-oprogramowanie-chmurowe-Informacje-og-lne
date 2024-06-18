@@ -10,26 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fromCurrency = $_POST['fromCurrency'];
         $toCurrency = $_POST['toCurrency'];
         $result = $_POST['result'];
-		$current_date = date('Y-m-d H:i:s');
+        $current_date = date('Y-m-d H:i:s');
 
         $sql = "INSERT INTO search (user_id, amount, from_currency, to_currency, result, date) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
+        $params = array($user_id, $amount, $fromCurrency, $toCurrency, $result, $current_date);
+        $stmt = sqlsrv_query($conn, $sql, $params);
 
-        if ($stmt) {
-            $stmt->bind_param("idssds", $user_id, $amount, $fromCurrency, $toCurrency, $result, $current_date);
-
-            if ($stmt->execute()) {
-                echo "Success";
-            } else {
-                echo "Error executing query: " . $stmt->error;
-            }
-
-            $stmt->close();
+        if ($stmt === false) {
+            echo "Error executing query: " . print_r(sqlsrv_errors(), true);
         } else {
-            echo "Error preparing query: " . $conn->error;
+            echo "Success";
         }
 
-        $conn->close();
+        sqlsrv_free_stmt($stmt);
+        sqlsrv_close($conn);
     } else {
         echo "Invalid data: " . json_encode($_POST);
     }
