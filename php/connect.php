@@ -1,12 +1,16 @@
 <?php
-@$server='localhost';
-@$login='root';
-@$password='';
-@$database='calc';
-@$conn = mysqli_init();
-mysqli_ssl_set($conn,NULL,NULL, "{path to CA cert}", NULL, NULL);
-mysqli_real_connect($conn, $server, $login, $passowrd, $database, 3306, MYSQLI_CLIENT_SSL);
-if (mysqli_connect_errno($conn)) { 
-  die('Nie udało się połączyć z bazą danych: '.mysqli_connect_errno()); 
+// PHP Data Objects(PDO) Sample Code:
+try {
+    $conn = new PDO("sqlsrv:server = tcp:kalkulatorwalut-server.database.windows.net,1433; Database = calc", "kalkulatorwalut-server-admin", "Md2l$ea5riJj2lAx");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
+catch (PDOException $e) {
+    print("Error connecting to SQL Server.");
+    die(print_r($e));
+}
+
+// SQL Server Extension Sample Code:
+$connectionInfo = array("UID" => "kalkulatorwalut-server-admin", "pwd" => "Md2l$ea5riJj2lAx", "Database" => "calc", "LoginTimeout" => 30, "Encrypt" => 1, "TrustServerCertificate" => 0);
+$serverName = "tcp:kalkulatorwalut-server.database.windows.net,1433";
+$conn = sqlsrv_connect($serverName, $connectionInfo);
 ?>
