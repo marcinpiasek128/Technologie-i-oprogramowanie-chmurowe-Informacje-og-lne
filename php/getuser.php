@@ -1,60 +1,46 @@
 <?php
-    require("connect.php");
+require("connect.php");
 
-    $x = $_SESSION['Username'];       
-    $sql = "SELECT * FROM data WHERE Username!='$x' ORDER BY ID_User ASC";
-    $result = $conn->query($sql);
+session_start();
+$x = $_SESSION['Username'];
+$sql = "SELECT * FROM data WHERE Username != ? ORDER BY ID_User ASC";
+$params = array($x);
+$stmt = sqlsrv_query($conn, $sql, $params);
 
-    echo "<table class='table'>";
-        echo "<tr>";
-            echo "<th>";
-                echo "ID";
-            echo "</th>";
-            echo "<th>";
-                echo "Nazwa";
-            echo "</th>";
-            echo "<th>";
-                echo "Email";
-            echo "</th>";
-            echo "<th>";
-                echo "Zablokuj konto";
-            echo "</th>";
-            echo "<th>";
-                echo "Odblokuj konto";
-            echo "</th>";
-        echo "</tr>";
-    
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "<tr>";
-                echo "<td>";
-                    echo $row["ID_User"];
-                echo "</td>";
-                echo "<td>";
-                    echo $row["Username"];
-                echo "</td>";
-                echo "<td>";
-                    echo $row["Email"];
-                echo "</td>";
-                echo "<td>";
-                    echo "<form action='ban.php' method='POST'>";
-                        echo "<input value='$row[ID_User]' name='block' hidden/>";
-                        echo "<input type='submit' value='Zablokuj $row[Username]'>";
-                    echo "</form>";
-                echo "</td>";
-                echo "<td>";
-                echo "<form action='unban.php' method='POST'>";
-                    echo "<input value='$row[ID_User]' name='unblock' hidden/>";
-                    echo "<input type='submit' value='Odblokuj $row[Username]' >";
-                echo "</form>";
-                echo "</td>";
-            echo "</tr>";
-        }
-    } 
-    else {
-        echo "Brak Użytkowników";
-    }
+if ($stmt === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
 
-    
-    echo "</table>";
+echo "<table class='table'>";
+echo "<tr>";
+echo "<th>ID</th>";
+echo "<th>Nazwa</th>";
+echo "<th>Email</th>";
+echo "<th>Zablokuj konto</th>";
+echo "<th>Odblokuj konto</th>";
+echo "</tr>";
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($row["ID_User"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["Username"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["Email"]) . "</td>";
+    echo "<td>";
+    echo "<form action='ban.php' method='POST'>";
+    echo "<input type='hidden' value='" . htmlspecialchars($row["ID_User"]) . "' name='block' />";
+    echo "<input type='submit' value='Zablokuj " . htmlspecialchars($row["Username"]) . "'>";
+    echo "</form>";
+    echo "</td>";
+    echo "<td>";
+    echo "<form action='unban.php' method='POST'>";
+    echo "<input type='hidden' value='" . htmlspecialchars($row["ID_User"]) . "' name='unblock' />";
+    echo "<input type='submit' value='Odblokuj " . htmlspecialchars($row["Username"]) . "'>";
+    echo "</form>";
+    echo "</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
+
+sqlsrv_free_stmt($stmt);
 ?>
