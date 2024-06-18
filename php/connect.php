@@ -1,8 +1,12 @@
 <?php
-@$server='tiochkalkulator-sql.mysql.database.azure.com';
-@$login='wmdhxfuygy';
-@$password='$LozVGJbooFxAK0N';
+@$server='localhost';
+@$login='root';
+@$password='';
 @$database='calc';
-@$data='data';
-@$conn = mysqli_real_connect($server,$login,$passowrd,$database, 3306) or die ("Wystąpił błąd połączenia z bazą danych");
+@$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, "DigiCertGlobalRootCA.crt", NULL, NULL)
+mysqli_real_connect($conn, $server, $login, $passowrd, $database, 3306, MYSQL_CLIENT_SSL);
+if (mysqli_connect_errno($conn)) { 
+  die('Nie udało się połączyć z bazą danych: '.mysqli_connect_errno()); 
+}
 ?>
