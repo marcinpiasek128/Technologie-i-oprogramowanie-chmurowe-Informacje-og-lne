@@ -75,6 +75,8 @@ require("settings-script.php");
             <h2>Zmień Awatar (.jpg):</h2>
 
             <?php
+		session_start();
+		require("connect.php");
 		
 		$x = $_SESSION['ID_User'];
 		$sql = "SELECT Picture FROM data WHERE ID_User = ?";
