@@ -77,31 +77,34 @@ require("connect.php");
             </div>
 			<div>
 				<?php
+require("connect.php");
 
-				if (isset($_SESSION['ID_User'])) {
-					$user_id = $_SESSION['ID_User'];
-					$sql = "SELECT amount, from_currency, to_currency, result, date FROM search WHERE user_id = ? ORDER BY date DESC";
-					$stmt = $conn->prepare($sql);
-					$stmt->bind_param("i", $user_id);
-					$stmt->execute();
-					$stmt->bind_result($amount, $fromCurrency, $toCurrency, $result, $date);
+if (isset($_SESSION['ID_User'])) {
+    $user_id = $_SESSION['ID_User'];
+    $sql = "SELECT amount, from_currency, to_currency, result, date FROM search WHERE user_id = ? ORDER BY date DESC";
+    $params = array($user_id);
+    $stmt = sqlsrv_query($conn, $sql, $params);
 
-					echo "<h2>Historia przeliczania walut</h2>";
-					echo "<table>";
-					echo "<tr><th>Kwota</th><th>Z waluty</th><th>Na walutę</th><th>Wynik</th><th>Data</th></tr>";
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
 
-					while ($stmt->fetch()) {
-						echo "<tr><td>$amount</td><td>$fromCurrency</td><td>$toCurrency</td><td>$result</td><td>$date</td></tr>";
-					}
+    echo "<h2>Historia przeliczania walut</h2>";
+    echo "<table>";
+    echo "<tr><th>Kwota</th><th>Z waluty</th><th>Na walutę</th><th>Wynik</th><th>Data</th></tr>";
 
-					echo "</table>";
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        echo "<tr><td>{$row['amount']}</td><td>{$row['from_currency']}</td><td>{$row['to_currency']}</td><td>{$row['result']}</td><td>{$row['date']->format('Y-m-d H:i:s')}</td></tr>";
+    }
 
-					$stmt->close();
-					$conn->close();
-				} else {
-					echo "Musisz być zalogowany, aby zobaczyć historię przeliczeń.";
-				}
-				?>
+    echo "</table>";
+
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($conn);
+} else {
+    echo "Musisz być zalogowany, aby zobaczyć historię przeliczeń.";
+}
+?>
 			</div>
 
         </div>
