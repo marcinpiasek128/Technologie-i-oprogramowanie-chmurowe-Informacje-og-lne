@@ -20,7 +20,7 @@ sqlsrv_free_stmt($stmt);
 sqlsrv_close($conn);
 
 if($avatar !== null) {
-    echo '<img class="avatar" src="data:image/jpeg;base64,' . base64_encode($avatar) . '" />';
+    echo '<img class="avatar" src="data:image/jpg;base64,' . base64_encode($avatar) . '" />';
 } else {
     echo "Avatar not found.";
 }
