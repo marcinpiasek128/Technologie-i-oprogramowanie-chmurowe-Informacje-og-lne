@@ -11,7 +11,8 @@ if (!empty($_FILES["image"]["name"])) {
     if (in_array($fileType, $allowTypes)) {
         $image = $_FILES['image']['tmp_name'];
         $avatar = file_get_contents($image);
-        $avatar = base64_encode($avatar);
+        // We don't need to base64 encode here, directly store as binary
+        // $avatar = base64_encode($avatar);
 
         $sql = "UPDATE data SET Picture = ? WHERE ID_User = ?";
         $params = array($avatar, $x);
@@ -23,9 +24,15 @@ if (!empty($_FILES["image"]["name"])) {
             header("Location: settings.php");
             exit();
         }
+    } else {
+        // If file type is not allowed
+        $_SESSION['e_image'] = "Allowed file type is .jpg";
+        header("Location: settings.php");
+        exit();
     }
 } else {
     header("Location: settings.php");
     exit();
 }
+sqlsrv_close($conn);
 ?>
