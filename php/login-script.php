@@ -36,6 +36,9 @@ if (isset($_POST['but_submit'])) {
 
         if ($working == true) {
             $_SESSION['loggedin'] = true;
+            $reg="SELECT * FROM $data WHERE Username='$login' AND Password='$pass'";
+            $res = sqlsrv_fetch_array($reg, SQLSRV_FETCH_ASSOC);
+            $row=$res->fetch_assoc();
             $_SESSION['ID_User'] = $row['ID_User'];
             $_SESSION['Username'] = $row['Username'];
 
